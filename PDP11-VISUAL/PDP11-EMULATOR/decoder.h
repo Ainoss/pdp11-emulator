@@ -39,13 +39,15 @@ struct instr_code {
 	struct instr_info* (*decode_instr)(struct instr_info*);
 };
 
+#pragma pack(1)
+
 struct doubleop_decoder {
 	u_int32_t op2_reg : 3;
 	u_int32_t op2_mode : 3;
 	u_int32_t op1_reg : 3;
 	u_int32_t op1_mode : 3;
 	u_int32_t opcode : 4;
-} __attribute__((__packed__));
+};
 
 struct regop_decoder {
 	u_int32_t op2_reg : 3;
@@ -53,7 +55,7 @@ struct regop_decoder {
 	u_int32_t op1_reg : 3;
 	u_int32_t opcode : 3;
 	u_int32_t space1 : 4;
-} __attribute__((__packed__));
+};
 
 struct singleop_decoder {
 	u_int32_t op1_reg : 3;
@@ -61,14 +63,14 @@ struct singleop_decoder {
 	u_int32_t opcode : 5;
 	u_int32_t space1 : 4;
 	u_int32_t byte : 1;
-} __attribute__((__packed__));
+};
 
 struct branch_decoder {
 	u_int32_t imm : 8;
 	u_int32_t opcode : 3;
 	u_int32_t space1 : 4;
 	u_int32_t opcode_hi : 1;
-} __attribute__((__packed__));
+};
 
 instr_info* decode_doubleop(instr_info* pinfo);
 instr_info* decode_regop(instr_info* pinfo);

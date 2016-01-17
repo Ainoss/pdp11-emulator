@@ -49,7 +49,7 @@ unsigned execute_instr(pdp_machine_state* pstate, instr_info* pinfo)
 u_int16_t* get_op_addr(pdp_machine_state* pstate, char byte, struct operand_info op)
 {
 	u_int16_t value;
-	u_int16_t* address;
+	u_int16_t* address = NULL;
 	u_int16_t pdp_addr;
 	switch (op.type >> 1){
 	case 0:
