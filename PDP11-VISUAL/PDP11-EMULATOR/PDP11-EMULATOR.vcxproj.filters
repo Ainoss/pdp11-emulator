@@ -24,6 +24,9 @@
     <ClCompile Include="executer.cpp">
       <Filter>PDPEmulator</Filter>
     </ClCompile>
+    <ClCompile Include="disassembler.cpp">
+      <Filter>PDPEmulator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="decoder.h">
@@ -36,6 +39,9 @@
       <Filter>PDPEmulator</Filter>
     </ClInclude>
     <ClInclude Include="instructions.h">
+      <Filter>PDPEmulator</Filter>
+    </ClInclude>
+    <ClInclude Include="disassembler.h">
       <Filter>PDPEmulator</Filter>
     </ClInclude>
   </ItemGroup>

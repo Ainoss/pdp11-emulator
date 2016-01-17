@@ -35,7 +35,7 @@ struct pdp_machine_state;
 struct instr_code {
 	char name[8];
 	unsigned(*exec_instr)(struct pdp_machine_state* pstate, instr_info* pinfo);
-	void(*disasm_instr)();
+	unsigned(*disasm_instr)(instr_info* pinfo, char* str);
 	struct instr_info* (*decode_instr)(struct instr_info*);
 };
 

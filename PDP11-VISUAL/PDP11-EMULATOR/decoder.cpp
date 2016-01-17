@@ -8,34 +8,34 @@
 #include <string.h>
 #include "decoder.h"
 #include "instructions.h"
-
+#include "disassembler.h"
 
 
 struct instr_code instr_table_doubleop[] = {
 	{ "", NULL, NULL, &find_singleop },   // 00
-	{ "MOV", &exec_mov, NULL, &decode_doubleop }, // 01
-	{ "CMP", &exec_cmp, NULL, &decode_doubleop }, // 02
-	{ "BIT", &exec_bit, NULL, &decode_doubleop }, // 03
-	{ "BIC", &exec_bic, NULL, &decode_doubleop }, // 04
-	{ "BIS", &exec_bis, NULL, &decode_doubleop }, // 05
-	{ "ADD", &exec_add, NULL, &decode_doubleop }, // 06
+	{ "MOV", &exec_mov, &disasm_doubleop, &decode_doubleop }, // 01
+	{ "CMP", &exec_cmp, &disasm_doubleop, &decode_doubleop }, // 02
+	{ "BIT", &exec_bit, &disasm_doubleop, &decode_doubleop }, // 03
+	{ "BIC", &exec_bic, &disasm_doubleop, &decode_doubleop }, // 04
+	{ "BIS", &exec_bis, &disasm_doubleop, &decode_doubleop }, // 05
+	{ "ADD", &exec_add, &disasm_doubleop, &decode_doubleop }, // 06
 	{ "", NULL, NULL, &find_regop },      // 07
 	{ "", NULL, NULL, &find_singleop },   // 10
-	{ "MOVB", &exec_mov, NULL, &decode_doubleop }, // 11
-	{ "CMPB", &exec_cmp, NULL, &decode_doubleop }, // 12
-	{ "BITB", &exec_bit, NULL, &decode_doubleop }, // 13
-	{ "BICB", &exec_bic, NULL, &decode_doubleop }, // 14
-	{ "BISB", &exec_bis, NULL, &decode_doubleop }, // 15
-	{ "SUB", &exec_add, NULL, &decode_doubleop }, // 16
+	{ "MOVB", &exec_mov, &disasm_doubleop, &decode_doubleop }, // 11
+	{ "CMPB", &exec_cmp, &disasm_doubleop, &decode_doubleop }, // 12
+	{ "BITB", &exec_bit, &disasm_doubleop, &decode_doubleop }, // 13
+	{ "BICB", &exec_bic, &disasm_doubleop, &decode_doubleop }, // 14
+	{ "BISB", &exec_bis, &disasm_doubleop, &decode_doubleop }, // 15
+	{ "SUB", &exec_add, &disasm_doubleop, &decode_doubleop }, // 16
 	{ "", NULL, NULL, NULL },             // 17
 };
 
 struct instr_code instr_table_regop[] = {
-	{ "MUL", NULL, NULL, &decode_regop },    // 0
-	{ "DIV", NULL, NULL, &decode_regop },    // 1
-	{ "ASH", NULL, NULL, &decode_regop },    // 2
-	{ "ASHC", NULL, NULL, &decode_regop },    // 3
-	{ "XOR", NULL, NULL, &decode_regop },    // 4
+	{ "MUL", NULL, &disasm_regop, &decode_regop },    // 0
+	{ "DIV", NULL, &disasm_regop, &decode_regop },    // 1
+	{ "ASH", NULL, &disasm_regop, &decode_regop },    // 2
+	{ "ASHC", NULL, &disasm_regop, &decode_regop },    // 3
+	{ "XOR", NULL, &disasm_regop, &decode_regop },    // 4
 	{ "", NULL, NULL, NULL },             // 5
 	{ "", NULL, NULL, NULL },             // 6
 	{ "SOB", NULL, NULL, NULL },             // 7
@@ -51,18 +51,18 @@ struct instr_code instr_table_singleop[] = {
 	{ "", NULL, NULL, NULL },             // b045
 	{ "", NULL, NULL, NULL },             // b046
 	{ "", NULL, NULL, NULL },             // b047
-	{ "CLR", NULL, NULL, &decode_singleop }, // b050
-	{ "COM", NULL, NULL, &decode_singleop }, // b051
-	{ "INC", &exec_inc, NULL, &decode_singleop }, // b052
-	{ "DEC", &exec_dec, NULL, &decode_singleop }, // b053
-	{ "NEG", NULL, NULL, &decode_singleop }, // b054
-	{ "ADC", NULL, NULL, &decode_singleop }, // b055
-	{ "SBC", NULL, NULL, &decode_singleop }, // b056
-	{ "TST", NULL, NULL, &decode_singleop }, // b057
-	{ "ROR", NULL, NULL, &decode_singleop }, // b060
-	{ "ROL", NULL, NULL, &decode_singleop }, // b061
-	{ "ASR", NULL, NULL, &decode_singleop }, // b062
-	{ "ASL", NULL, NULL, &decode_singleop }, // b063
+	{ "CLR", NULL, &disasm_singleop, &decode_singleop }, // b050
+	{ "COM", NULL, &disasm_singleop, &decode_singleop }, // b051
+	{ "INC", &exec_inc, &disasm_singleop, &decode_singleop }, // b052
+	{ "DEC", &exec_dec, &disasm_singleop, &decode_singleop }, // b053
+	{ "NEG", NULL, &disasm_singleop, &decode_singleop }, // b054
+	{ "ADC", NULL, &disasm_singleop, &decode_singleop }, // b055
+	{ "SBC", NULL, &disasm_singleop, &decode_singleop }, // b056
+	{ "TST", NULL, &disasm_singleop, &decode_singleop }, // b057
+	{ "ROR", NULL, &disasm_singleop, &decode_singleop }, // b060
+	{ "ROL", NULL, &disasm_singleop, &decode_singleop }, // b061
+	{ "ASR", NULL, &disasm_singleop, &decode_singleop }, // b062
+	{ "ASL", NULL, &disasm_singleop, &decode_singleop }, // b063
 	{ "", NULL, NULL, NULL },             // b064
 	{ "", NULL, NULL, NULL },             // b065
 	{ "", NULL, NULL, NULL },             // b066
@@ -79,21 +79,21 @@ struct instr_code instr_table_singleop[] = {
 
 struct instr_code instr_table_branch[] = {
 	{ "", NULL, NULL, NULL },           // 0000
-	{ "BR", &exec_br, NULL, &decode_branch }, // 0004
-	{ "BNE", &exec_bne, NULL, &decode_branch }, // 0010
-	{ "BEQ", &exec_beq, NULL, &decode_branch }, // 0014
-	{ "BGE", NULL, NULL, &decode_branch }, // 0020
-	{ "BLT", NULL, NULL, &decode_branch }, // 0024
-	{ "BGT", NULL, NULL, &decode_branch }, // 0030
-	{ "BLE", NULL, NULL, &decode_branch }, // 0034
-	{ "BPL", NULL, NULL, &decode_branch }, // 1000
-	{ "BMI", NULL, NULL, &decode_branch }, // 1004
-	{ "BHI", NULL, NULL, &decode_branch }, // 1010
-	{ "BLOS", NULL, NULL, &decode_branch }, // 1014
-	{ "BVC", NULL, NULL, &decode_branch }, // 1020
-	{ "BVS", NULL, NULL, &decode_branch }, // 1024
-	{ "BCC", NULL, NULL, &decode_branch }, // 1030
-	{ "BCS", NULL, NULL, &decode_branch }, // 1034
+	{ "BR", &exec_br, &disasm_branch, &decode_branch }, // 0004
+	{ "BNE", &exec_bne, &disasm_branch, &decode_branch }, // 0010
+	{ "BEQ", &exec_beq, &disasm_branch, &decode_branch }, // 0014
+	{ "BGE", NULL, &disasm_branch, &decode_branch }, // 0020
+	{ "BLT", NULL, &disasm_branch, &decode_branch }, // 0024
+	{ "BGT", NULL, &disasm_branch, &decode_branch }, // 0030
+	{ "BLE", NULL, &disasm_branch, &decode_branch }, // 0034
+	{ "BPL", NULL, &disasm_branch, &decode_branch }, // 1000
+	{ "BMI", NULL, &disasm_branch, &decode_branch }, // 1004
+	{ "BHI", NULL, &disasm_branch, &decode_branch }, // 1010
+	{ "BLOS", NULL, &disasm_branch, &decode_branch }, // 1014
+	{ "BVC", NULL, &disasm_branch, &decode_branch }, // 1020
+	{ "BVS", NULL, &disasm_branch, &decode_branch }, // 1024
+	{ "BCC", NULL, &disasm_branch, &decode_branch }, // 1030
+	{ "BCS", NULL, &disasm_branch, &decode_branch }, // 1034
 };
 
 instr_info* decode_doubleop(instr_info* pinfo)

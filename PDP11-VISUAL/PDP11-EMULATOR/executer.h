@@ -1,5 +1,5 @@
 /*
-* executer.c
+* executer.h
 * Used to execute pdp-11 instructions and to store machine state
 * @ainoss
 */

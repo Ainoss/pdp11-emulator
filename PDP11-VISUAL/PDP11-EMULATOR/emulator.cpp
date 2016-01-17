@@ -9,6 +9,8 @@
 #include <string.h>
 #include "decoder.h"
 #include "executer.h"
+#include "emulator.h"
+#include "disassembler.h"
 #include <stdint.h>
 
 typedef uint16_t u_int16_t;
@@ -27,10 +29,7 @@ unsigned pdp11_step()
 		return 1;
 	}
 	st = execute_instr(&gstate, &ii);
-	if (st)
-		return 1;
-
-	return 0;
+	return st;
 }
 
 unsigned pdp11_init(void* initial_rom)
@@ -57,4 +56,28 @@ unsigned pdp11_debug()
 	printf("\n");
 
 	return 0;
+}
+
+unsigned pdp11_get_reg(struct pdp11_reg *preg)
+{
+	for (int i = 0; i < 8; i++)
+		preg->reg[i] = gstate.reg[i];
+	return 0;
+}
+
+unsigned pdp11_disasm(u_int16_t *ppc)
+{
+	instr_info ii;
+	unsigned st;
+	char str[64];
+
+	st = decode_instr((u_int16_t*)&gstate.mem_raw[*ppc], &ii);
+	if (st) {
+		fprintf(stderr, "instruction not supported: pc=%X\n", *ppc);
+		return 1;
+	}
+	st = disasm_instr(&ii, str);
+	*ppc += ii.length * 2;
+
+	return st;
 }

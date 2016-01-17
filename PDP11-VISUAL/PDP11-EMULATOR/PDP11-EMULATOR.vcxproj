@@ -67,11 +67,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="decoder.cpp" />
+    <ClCompile Include="disassembler.cpp" />
     <ClCompile Include="emulator.cpp" />
     <ClCompile Include="executer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="decoder.h" />
+    <ClInclude Include="disassembler.h" />
     <ClInclude Include="emulator.h" />
     <ClInclude Include="executer.h" />
     <ClInclude Include="instructions.h" />
