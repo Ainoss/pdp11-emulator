@@ -1,2 +1,10 @@
 \\Mac\Home\Desktop\PDP11-GUI\PDP11-GUI\bin\Debug\PDP11-GUI.exe.config
 \\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\bin\Debug\PDP11-GUI.exe.config
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\bin\Debug\PDP11-GUI.exe
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\bin\Debug\PDP11-GUI.pdb
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11_GUI.Window.resources
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11_GUI.Properties.Resources.resources
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11-GUI.csproj.GenerateResource.Cache
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11-GUI.exe
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11-GUI.pdb
+\\Mac\Home\Documents\Repositories\pdp11-emulator\PDP11-VISUAL\PDP11-GUI\obj\Debug\PDP11-GUI.csprojResolveAssemblyReference.cache
