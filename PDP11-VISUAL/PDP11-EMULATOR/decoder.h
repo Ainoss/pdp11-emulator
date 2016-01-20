@@ -39,7 +39,7 @@ struct instr_code {
 	struct instr_info* (*decode_instr)(struct instr_info*);
 };
 
-#pragma pack(1)
+#pragma pack(push, 1)
 
 struct doubleop_decoder {
 	u_int32_t op2_reg : 3;
@@ -71,6 +71,8 @@ struct branch_decoder {
 	u_int32_t space1 : 4;
 	u_int32_t opcode_hi : 1;
 };
+
+#pragma pack(pop)
 
 instr_info* decode_doubleop(instr_info* pinfo);
 instr_info* decode_regop(instr_info* pinfo);
