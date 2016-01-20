@@ -13,6 +13,11 @@
 #include "disassembler.h"
 #include <stdint.h>
 
+#define PDP11_VRAM_ADDR 16*1024
+#define PDP11_VRAM_SIZE 16*1024
+#define PDP11_ROM_ADDR  32*1024
+#define PDP11_ROM_SIZE  32*1024
+
 typedef uint16_t u_int16_t;
 
 pdp_machine_state gstate;
@@ -39,6 +44,12 @@ unsigned pdp11_init(void* initial_rom)
 	return 0;
 }
 
+unsigned pdp11_close()
+{
+	state_deinit(&gstate);
+	return 0;
+}
+
 unsigned pdp11_debug()
 {
 	int i;
@@ -62,6 +73,10 @@ unsigned pdp11_get_reg(struct pdp11_reg *preg)
 {
 	for (int i = 0; i < 8; i++)
 		preg->reg[i] = gstate.reg[i];
+	preg->c_f = gstate.psw_reg.c_f;
+	preg->n_f = gstate.psw_reg.n_f;
+	preg->z_f = gstate.psw_reg.z_f;
+	preg->v_f = gstate.psw_reg.v_f;
 	return 0;
 }
 
@@ -80,4 +95,12 @@ unsigned pdp11_disasm(u_int16_t *ppc)
 	*ppc += ii.length * 2;
 
 	return st;
+}
+
+unsigned pdp11_get_frame(void *buffer)
+{
+	if (!buffer)
+		return 1;
+	memcpy(buffer, &gstate.mem_raw[PDP11_VRAM_ADDR], PDP11_VRAM_SIZE);
+	return 0;
 }

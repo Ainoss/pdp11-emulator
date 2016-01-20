@@ -30,6 +30,7 @@ typedef struct pdp_machine_state {
 
 
 unsigned state_init(pdp_machine_state* pstate);
+unsigned state_deinit(pdp_machine_state* pstate);
 unsigned execute_instr(pdp_machine_state* pstate, instr_info* pinfo);
 unsigned load_rom(pdp_machine_state* pstate, void* initial_rom);
 

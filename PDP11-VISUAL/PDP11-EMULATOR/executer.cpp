@@ -28,6 +28,13 @@ unsigned state_init(pdp_machine_state* pstate)
 	return 0;
 }
 
+unsigned state_deinit(pdp_machine_state* pstate)
+{
+	free(pstate->mem_raw);
+	return 0;
+}
+
+
 unsigned load_rom(pdp_machine_state* pstate, void* initial_rom)
 {
 	memcpy(&pstate->mem_raw[32 * 1024], initial_rom, 32 * 1024);
@@ -48,7 +55,6 @@ unsigned execute_instr(pdp_machine_state* pstate, instr_info* pinfo)
 
 u_int16_t* get_op_addr(pdp_machine_state* pstate, char byte, struct operand_info op)
 {
-	u_int16_t value;
 	u_int16_t* address = NULL;
 	u_int16_t pdp_addr;
 	switch (op.type >> 1){
@@ -184,14 +190,14 @@ unsigned exec_bit(pdp_machine_state* pstate, instr_info* pinfo)
 
 unsigned exec_br(pdp_machine_state* pstate, instr_info* pinfo)
 {
-	int8_t offset = pinfo->op1.imm;
+	int8_t offset = (int8_t) pinfo->op1.imm;
 	pstate->reg[7] += offset << 1;
 	return 0;
 }
 
 unsigned exec_bne(pdp_machine_state* pstate, instr_info* pinfo)
 {
-	int8_t offset = pinfo->op1.imm;
+	int8_t offset = (int8_t)pinfo->op1.imm;
 	if (!pstate->psw_reg.z_f)
 		pstate->reg[7] += offset << 1;
 	else
@@ -201,7 +207,7 @@ unsigned exec_bne(pdp_machine_state* pstate, instr_info* pinfo)
 
 unsigned exec_beq(pdp_machine_state* pstate, instr_info* pinfo)
 {
-	int8_t offset = pinfo->op1.imm;
+	int8_t offset = (int8_t)pinfo->op1.imm;
 	if (pstate->psw_reg.z_f)
 		pstate->reg[7] += offset << 1;
 	else

@@ -78,7 +78,6 @@ unsigned disasm_singleop(instr_info* pinfo, char* str)
 
 unsigned disasm_branch(instr_info* pinfo, char* str)
 {
-	char str_op[32];
 	sprintf_s(str, 32, "%s %s", pinfo->icode->name, pinfo->op1.imm);
 	return 0;
 }
