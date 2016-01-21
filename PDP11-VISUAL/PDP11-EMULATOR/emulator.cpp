@@ -37,10 +37,23 @@ unsigned pdp11_step()
 	return st;
 }
 
-unsigned pdp11_init(void* initial_rom)
+unsigned pdp11_init()
 {
+	uint16_t rom[16 * 1024];
+	FILE* fin;
+	if (fopen_s(&fin, "rom.raw", "r")){
+		perror("opening rom file");
+		return 1;
+	}
+	if (!fread(rom, sizeof(rom), 1, fin)){
+		perror("reading rom file");
+		return 1;
+	}
+
 	state_init(&gstate);
-	load_rom(&gstate, initial_rom);
+	load_rom(&gstate, &rom);
+
+	fclose(fin);
 	return 0;
 }
 

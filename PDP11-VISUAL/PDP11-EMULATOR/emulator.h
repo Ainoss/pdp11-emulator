@@ -19,7 +19,7 @@ struct pdp11_reg {
 
 };
 
-unsigned pdp11_init(void* initial_rom);
+unsigned pdp11_init();
 unsigned pdp11_close();
 
 unsigned pdp11_debug();
