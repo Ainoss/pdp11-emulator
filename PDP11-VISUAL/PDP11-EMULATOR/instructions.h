@@ -20,5 +20,8 @@ unsigned exec_beq(pdp_machine_state* pstate, instr_info* pinfo);
 unsigned exec_inc(pdp_machine_state* pstate, instr_info* pinfo);
 unsigned exec_dec(pdp_machine_state* pstate, instr_info* pinfo);
 
+unsigned exec_mul(pdp_machine_state* pstate, instr_info* pinfo);
+unsigned exec_ash(pdp_machine_state* pstate, instr_info* pinfo);
+
 #endif //INSTRUCTIONS_H
 

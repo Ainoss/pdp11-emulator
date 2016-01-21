@@ -31,9 +31,9 @@ struct instr_code instr_table_doubleop[] = {
 };
 
 struct instr_code instr_table_regop[] = {
-	{ "MUL", NULL, &disasm_regop, &decode_regop },    // 0
+	{ "MUL", &exec_mul, &disasm_regop, &decode_regop },    // 0
 	{ "DIV", NULL, &disasm_regop, &decode_regop },    // 1
-	{ "ASH", NULL, &disasm_regop, &decode_regop },    // 2
+	{ "ASH", &exec_ash, &disasm_regop, &decode_regop },    // 2
 	{ "ASHC", NULL, &disasm_regop, &decode_regop },    // 3
 	{ "XOR", NULL, &disasm_regop, &decode_regop },    // 4
 	{ "", NULL, NULL, NULL },             // 5
@@ -100,6 +100,7 @@ instr_info* decode_doubleop(instr_info* pinfo)
 {
 	struct doubleop_decoder *decoder = (struct doubleop_decoder*) pinfo->pcode;
 
+	pinfo->byte = decoder->opcode >> 3;
 	pinfo->op1.type = decoder->op1_mode;
 	pinfo->op1.reg = decoder->op1_reg;
 	pinfo->op2.type = decoder->op2_mode;

@@ -80,11 +80,12 @@ unsigned pdp11_get_reg(struct pdp11_reg *preg)
 	return 0;
 }
 
-unsigned pdp11_disasm(u_int16_t *ppc)
+unsigned pdp11_disasm(u_int16_t *ppc, char *str)
 {
 	instr_info ii;
 	unsigned st;
-	char str[64];
+	if (!str)
+		return 1;
 
 	st = decode_instr((u_int16_t*)&gstate.mem_raw[*ppc], &ii);
 	if (st) {

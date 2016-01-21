@@ -43,12 +43,11 @@ unsigned load_rom(pdp_machine_state* pstate, void* initial_rom)
 
 unsigned execute_instr(pdp_machine_state* pstate, instr_info* pinfo)
 {
-	printf("exec: %s, %ubytes\n", pinfo->icode->name, pinfo->length);
 	if (pinfo->icode->exec_instr == NULL)
 		return 1;
 
-	pinfo->icode->exec_instr(pstate, pinfo);
 	pstate->reg[7] += pinfo->length * 2;
+	pinfo->icode->exec_instr(pstate, pinfo);
 
 	return 0;
 }
@@ -103,7 +102,7 @@ unsigned update_psw_nz(struct psw_reg* psw, u_int32_t res, char byte)
 
 unsigned exec_add(pdp_machine_state* pstate, instr_info* pinfo)
 {
-	char sub_instr = pinfo->byte;
+	unsigned char sub_instr = pinfo->byte;
 	pinfo->byte = 0;
 	u_int16_t* src = GET_ADDR(pinfo->op1);
 	u_int16_t* dst = GET_ADDR(pinfo->op2);
@@ -238,5 +237,33 @@ unsigned exec_dec(pdp_machine_state* pstate, instr_info* pinfo)
 
 	UPD_PSW_NZ(res);
 	pstate->psw_reg.v_f = 0;
+	return 0;
+}
+
+unsigned exec_mul(pdp_machine_state* pstate, instr_info* pinfo)
+{
+	u_int16_t* reg = GET_ADDR(pinfo->op1);
+	u_int16_t* src = GET_ADDR(pinfo->op2);
+	uint32_t mul = GET_VAL(*src) * GET_VAL(*src);
+	SET_VAL(reg, (uint16_t)mul);
+	SET_VAL(reg+1, mul >> 16);
+
+	pstate->psw_reg.z_f = !(mul &((u_int16_t)-1));
+	pstate->psw_reg.n_f = mul >> 31;
+	pstate->psw_reg.v_f = 0;
+	pstate->psw_reg.c_f = (mul >> 16) ? 1 : 0;
+	return 0;
+}
+
+unsigned exec_ash(pdp_machine_state* pstate, instr_info* pinfo)
+{
+	u_int16_t* reg = GET_ADDR(pinfo->op1);
+	int16_t* src = (int16_t*) GET_ADDR(pinfo->op2);
+
+	if (*src > 0)
+		SET_VAL(reg, *reg << *src);
+	else if (*src < 0)
+		SET_VAL(reg, *reg >> -*src);
+
 	return 0;
 }
